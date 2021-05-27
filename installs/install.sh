@@ -607,7 +607,7 @@ if [ ! -z ${vnetName} ]; then
                 --client-secret $clientSecret \
                 --enable-cluster-autoscaler \
                 --min-count 1 \
-                --max-count 50 \
+                --max-count 20 \
                 --generate-ssh-keys \
                 --disable-rbac \
                 --node-vm-size Standard_D2s_v3 \
@@ -628,7 +628,7 @@ if [ ! -z ${vnetName} ]; then
                 --client-secret $clientSecret \
                 --enable-cluster-autoscaler \
                 --min-count 1 \
-                --max-count 50 \
+                --max-count 20 \
                 --generate-ssh-keys \
                 --disable-rbac \
                 --node-vm-size Standard_D2s_v3 \
@@ -653,7 +653,7 @@ else
         --client-secret $clientSecret \
         --enable-cluster-autoscaler \
         --min-count 1 \
-        --max-count 50 \
+        --max-count 20 \
         --generate-ssh-keys \
 	    --disable-rbac \
 	    --node-vm-size Standard_D2s_v3 \
