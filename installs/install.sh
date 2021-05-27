@@ -596,7 +596,7 @@ if [ ! -z ${vnetName} ]; then
     az role assignment create --assignee $servicePrincipal --scope $VNET_ID --role Contributor
     ##create vnet and subnet if required for deployment
     echo "INFO: Creating AKS cluster with Vnet deployment"
-    ##create default AKS cluster with node size Standard_D4s_v3
+    ##create default AKS cluster with node size Standard_D4_v3
     echo "INFO:Creating AKS cluster $aksName with D2s_v3 nodes...."
     if [ ! -z ${fwkrg} ]; then
         az aks create \
@@ -610,7 +610,7 @@ if [ ! -z ${vnetName} ]; then
                 --max-count 20 \
                 --generate-ssh-keys \
                 --disable-rbac \
-                --node-vm-size Standard_D4s_v3 \
+                --node-vm-size Standard_D4_v3 \
                 --location $location \
                 --vnet-subnet-id $SUBNET_ID
 
@@ -631,7 +631,7 @@ if [ ! -z ${vnetName} ]; then
                 --max-count 20 \
                 --generate-ssh-keys \
                 --disable-rbac \
-                --node-vm-size Standard_D4s_v3 \
+                --node-vm-size Standard_D4_v3 \
                 --location $location \
                 --vnet-subnet-id $SUBNET_ID
 
@@ -643,7 +643,7 @@ if [ ! -z ${vnetName} ]; then
     fi
 else
     echo "INFO: Framework Deployment will be without a Vnet"
-    ##create default AKS cluster with node size Standard_D4s_v3
+    ##create default AKS cluster with node size Standard_D4_v3
     echo "INFO:Creating AKS cluster $aksName with D2s_v3 nodes...."
     az aks create \
         --resource-group $resourceGroup \
@@ -656,7 +656,7 @@ else
         --max-count 20 \
         --generate-ssh-keys \
 	    --disable-rbac \
-	    --node-vm-size Standard_D4s_v3 \
+	    --node-vm-size Standard_D4_v3 \
 	    --location $location
 
     if [ $? -ne 0 ]
