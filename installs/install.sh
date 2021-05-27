@@ -269,47 +269,47 @@ fi
 #add reporter nodepool
 #check if already exists
 
-reportingnodepool=0
-if [ ! -z $fwkrg ];then
-    for i in $(az aks nodepool list -g $fwkrg --cluster-name $aksName -o tsv --query [].name)
-    do
-        if [ $i == "reporterpool" ]; then
-            echo "INFO: Reporting Node Pool aready exists"
-            reportingnodepool=1
-        fi
-    done
+# reportingnodepool=0
+# if [ ! -z $fwkrg ];then
+#     for i in $(az aks nodepool list -g $fwkrg --cluster-name $aksName -o tsv --query [].name)
+#     do
+#         if [ $i == "reporterpool" ]; then
+#             echo "INFO: Reporting Node Pool aready exists"
+#             reportingnodepool=1
+#         fi
+#     done
 
-    if [[ $reportingnodepool -eq 0 ]]; then
-        echo "INFO:Adding reporting nodepool..."
-        az aks nodepool add --cluster-name $aksName -g $fwkrg --name reporterpool --node-count 1 --node-vm-size Standard_D8s_v3
-        reporternode=$(kubectl get nodes |awk '/aks-reporterpool/ {print $1}')
-        echo "INFO: Tainting reporting node..."
-        kubectl taint nodes $reporternode sku=reporter:NoSchedule
-        echo "INFO: Tainting reporting node completed..."
-    fi
-else
-    for i in $(az aks nodepool list -g $resourceGroup --cluster-name $aksName -o tsv --query [].name)
-    do
-        if [ $i == "reporterpool" ]; then
-            echo "INFO: Reporting Node Pool aready exists"
-            reportingnodepool=1
-        fi
-    done
+#     if [[ $reportingnodepool -eq 0 ]]; then
+#         echo "INFO:Adding reporting nodepool..."
+#         az aks nodepool add --cluster-name $aksName -g $fwkrg --name reporterpool --node-count 1 --node-vm-size Standard_D8s_v3
+#         reporternode=$(kubectl get nodes |awk '/aks-reporterpool/ {print $1}')
+#         echo "INFO: Tainting reporting node..."
+#         kubectl taint nodes $reporternode sku=reporter:NoSchedule
+#         echo "INFO: Tainting reporting node completed..."
+#     fi
+# else
+#     for i in $(az aks nodepool list -g $resourceGroup --cluster-name $aksName -o tsv --query [].name)
+#     do
+#         if [ $i == "reporterpool" ]; then
+#             echo "INFO: Reporting Node Pool aready exists"
+#             reportingnodepool=1
+#         fi
+#     done
 
-    if [[ $reportingnodepool -eq 0 ]]; then
-        echo "INFO:Adding reporting nodepool..."
-        az aks nodepool add --cluster-name $aksName -g $resourceGroup --name reporterpool --node-count 1 --node-vm-size Standard_D8s_v3
-        reporternode=$(kubectl get nodes |awk '/aks-reporterpool/ {print $1}')
-        echo "INFO: Tainting reporting node..."
-        kubectl taint nodes $reporternode sku=reporter:NoSchedule
-        echo "INFO: Tainting reporting node completed..."
-    fi
-fi
+#     if [[ $reportingnodepool -eq 0 ]]; then
+#         echo "INFO:Adding reporting nodepool..."
+#         az aks nodepool add --cluster-name $aksName -g $resourceGroup --name reporterpool --node-count 1 --node-vm-size Standard_D8s_v3
+#         reporternode=$(kubectl get nodes |awk '/aks-reporterpool/ {print $1}')
+#         echo "INFO: Tainting reporting node..."
+#         kubectl taint nodes $reporternode sku=reporter:NoSchedule
+#         echo "INFO: Tainting reporting node completed..."
+#     fi
+# fi
 echo "INFO:Generating yaml files from templates..."
 
 # read the yaml template from a file and substitute the string 
 # ###acrname### with the value of the acrName variable
-sed "s/###acrname###/$acrName/g" ../deploy/reporter.yaml.template > ../deploy/reporter.yaml
+# sed "s/###acrname###/$acrName/g" ../deploy/reporter.yaml.template > ../deploy/reporter.yaml
 sed "s/###acrname###/$acrName/g" ../deploy/jslave.yaml.template > ../deploy/jslave.yaml
 sed "s/###acrname###/$acrName/g" ../deploy/jmaster.yaml.template > ../deploy/jmaster.yaml
 
@@ -318,10 +318,10 @@ echo "INFO:Template yaml files generated in deploy directory..."
 # apply the yaml with the substituted value
 
 echo "INFO:Creating Reporting deployment...."
-kubectl apply -f ../deploy/azure-premium.yaml
-kubectl apply -f ../deploy/influxdb_svc.yaml
-kubectl apply -f ../deploy/jmeter_influx_configmap.yaml
-kubectl apply -f ../deploy/reporter.yaml
+# kubectl apply -f ../deploy/azure-premium.yaml
+# kubectl apply -f ../deploy/influxdb_svc.yaml
+# kubectl apply -f ../deploy/jmeter_influx_configmap.yaml
+# kubectl apply -f ../deploy/reporter.yaml
 echo "INFO:Reporting deployment complete...."
 echo "INFO:Creating Jmeter Slaves.."
 kubectl apply -f ../deploy/jslaves_svc.yaml
@@ -333,50 +333,50 @@ kubectl apply -f ../deploy/jmeter-master-configmap.yaml
 kubectl apply -f ../deploy/jmaster.yaml
 echo "INFO: Jmeter Master deployment complete...."
 
-influxdb_pod=$(kubectl get pods | grep report | awk '{print $1}')
-echo "INFO: Waiting for reporting container to start...."
+# influxdb_pod=$(kubectl get pods | grep report | awk '{print $1}')
+# echo "INFO: Waiting for reporting container to start...."
 
-COUNTER=1
-while [ `kubectl get pods |grep report |awk '{print $3}'` != "Running" ]
-do
-echo "INFO: Checking reporting pod is running ...check#"$COUNTER
-let COUNTER++
-sleep 5
-done
+# COUNTER=1
+# while [ `kubectl get pods |grep report |awk '{print $3}'` != "Running" ]
+# do
+# echo "INFO: Checking reporting pod is running ...check#"$COUNTER
+# let COUNTER++
+# sleep 5
+# done
 
-echo "INFO: reporting container started...."
-echo "INFO: Adding jmeter database to Influxdb...."
+# echo "INFO: reporting container started...."
+# echo "INFO: Adding jmeter database to Influxdb...."
 
-kubectl exec -ti $influxdb_pod -- influx -execute 'CREATE DATABASE jmeter'
+# kubectl exec -ti $influxdb_pod -- influx -execute 'CREATE DATABASE jmeter'
 
-echo "INFO: Jmeter database added to Influxdb...."
-echo "INFO: Adding default datasource to grafana...."
+# echo "INFO: Jmeter database added to Influxdb...."
+# echo "INFO: Adding default datasource to grafana...."
 #give Grafana time to start
 # changed to remove sleep and replace with kubectl action
 #sleep 20
 #kubectl exec -ti $influxdb_pod -- curl 'http://admin:admin@localhost:3000/api/datasources' -X POST -H 'Content-Type: application/json;charset=UTF-8' --data-binary '{"name":"jmeterdb","type":"influxdb","url":"http://localhost:8086","access":"proxy","isDefault":true,"database":"jmeter","user":"admin","password":"admin"}'
 
-kubectl cp ../deploy/datasource.json $influxdb_pod:/datasource.json
-kubectl exec -ti $influxdb_pod -- /bin/bash -c 'until [[ $(curl "http://admin:admin@localhost:3000/api/datasources" -X POST -H "Content-Type: application/json;charset=UTF-8" --data-binary @datasource.json) ]]; do sleep 5; done'
+# kubectl cp ../deploy/datasource.json $influxdb_pod:/datasource.json
+# kubectl exec -ti $influxdb_pod -- /bin/bash -c 'until [[ $(curl "http://admin:admin@localhost:3000/api/datasources" -X POST -H "Content-Type: application/json;charset=UTF-8" --data-binary @datasource.json) ]]; do sleep 5; done'
 
-echo "INFO: Default datasource added to grafana...."
+# echo "INFO: Default datasource added to grafana...."
 
 
-echo "INFO: Adding default dashboard"
-kubectl cp ../deploy/jmeterDash.json $influxdb_pod:/jmeterDash.json
+# echo "INFO: Adding default dashboard"
+# kubectl cp ../deploy/jmeterDash.json $influxdb_pod:/jmeterDash.json
 
-kubectl exec -ti $influxdb_pod -- curl 'http://admin:admin@localhost:3000/api/dashboards/db' -X POST -H 'Content-Type: application/json;charset=UTF-8' --data-binary '@jmeterDash.json'
+# kubectl exec -ti $influxdb_pod -- curl 'http://admin:admin@localhost:3000/api/dashboards/db' -X POST -H 'Content-Type: application/json;charset=UTF-8' --data-binary '@jmeterDash.json'
 
-echo "INFO: Default dashboard has been added"
+# echo "INFO: Default dashboard has been added"
 
-echo "INFO: kubernetes details..."
+# echo "INFO: kubernetes details..."
 kubectl get -n default all
 
 
-lbIp=$(kubectl get svc |grep reporter |awk '{print $4}')
+# lbIp=$(kubectl get svc |grep reporter |awk '{print $4}')
 
-echo "#########################################"
-echo "## Grafana can be accessed at: "$lbIp" ##"
+# echo "#########################################"
+# echo "## Grafana can be accessed at: "$lbIp" ##"
 echo "#########################################"
 echo "## AKS cluster name is: "$aksName"     ##"
 echo "#########################################"
