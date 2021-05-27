@@ -576,20 +576,20 @@ else
     echo "INFO:jmeterslave:lastest already existing in acr...."
 fi
 
-if ! az acr repository show -n $acrName --image testframework/reporter:latest &>/dev/null; then
-    echo "INFO:slave image does not exist....creating..."
-    echo "INFO:building jmeter reporter container and pushing to [ $acrName ]"
-    az acr build -t testframework/reporter:latest -f ../reporter/Dockerfile -r $acrName .
-    if [ $? -ne 0 ]
-    then
-        echo "ERROR:Failed to build and push slave error: '${?}'"
-        exit 1
-    else
-        echo "INFO:jmeter reporter container completed...."
-    fi
-else
-    echo "INFO:reporter:lastest already existing in acr...."
-fi
+# if ! az acr repository show -n $acrName --image testframework/reporter:latest &>/dev/null; then
+#     echo "INFO:slave image does not exist....creating..."
+#     echo "INFO:building jmeter reporter container and pushing to [ $acrName ]"
+#     az acr build -t testframework/reporter:latest -f ../reporter/Dockerfile -r $acrName .
+#     if [ $? -ne 0 ]
+#     then
+#         echo "ERROR:Failed to build and push slave error: '${?}'"
+#         exit 1
+#     else
+#         echo "INFO:jmeter reporter container completed...."
+#     fi
+# else
+#     echo "INFO:reporter:lastest already existing in acr...."
+# fi
 
 if [ ! -z ${vnetName} ]; then
     ## assign role to SP
