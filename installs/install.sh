@@ -610,7 +610,7 @@ if [ ! -z ${vnetName} ]; then
                 --max-count 20 \
                 --generate-ssh-keys \
                 --disable-rbac \
-                --node-vm-size Standard_D4_v3 \
+                --node-vm-size Standard_D2s_v3 \
                 --location $location \
                 --vnet-subnet-id $SUBNET_ID
 
@@ -631,7 +631,7 @@ if [ ! -z ${vnetName} ]; then
                 --max-count 20 \
                 --generate-ssh-keys \
                 --disable-rbac \
-                --node-vm-size Standard_D4_v3 \
+                --node-vm-size Standard_D2s_v3 \
                 --location $location \
                 --vnet-subnet-id $SUBNET_ID
 
@@ -653,10 +653,10 @@ else
         --client-secret $clientSecret \
         --enable-cluster-autoscaler \
         --min-count 1 \
-        --max-count 20 \
+        --max-count 12 \
         --generate-ssh-keys \
 	    --disable-rbac \
-	    --node-vm-size Standard_D4_v3 \
+	    --node-vm-size Standard_D2s_v3 \
 	    --location $location
 
     if [ $? -ne 0 ]
