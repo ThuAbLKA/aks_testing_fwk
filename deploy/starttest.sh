@@ -25,15 +25,6 @@ master_pod=`kubectl get po  | grep jmeter-master | awk '{print $1}'`
 
 kubectl cp "$jmx"  "$master_pod:/$test_name"
 
-# set the JMTR user.properties to include reporting
-kubectl cp ./jmeter/user.properties "$master_pod:/jmeter/apache-jmeter-*/bin/user.properties"
-
-# add template file
-kubectl exec -it $master_pod -- /bin/bash touch /jmeter/template.csv
-
-# create reporting folder
-kubectl exec -it $master_pod -- /bin/bash mkdir /jmeter/reporting
-
 ## Echo Starting Jmeter load test
 
 kubectl exec -ti $master_pod -- /bin/bash /load_test "$test_name"
