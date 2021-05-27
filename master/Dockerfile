@@ -16,7 +16,7 @@ RUN   mkdir /jmeter \
 	&& tar -xzf apache-jmeter-$JMETER_VERSION.tgz \
 	&& rm apache-jmeter-$JMETER_VERSION.tgz
 
-COPY user.properties /jmeter/apache-jmeter-$JMETER_VERSION/bin
+COPY . /jmeter/apache-jmeter-$JMETER_VERSION/bin
 
 ENV JMETER_HOME /jmeter/apache-jmeter-$JMETER_VERSION/
 
